@@ -1,9 +1,12 @@
 import { Link, useLocation } from "@orange-js/orange";
 import { PropsWithChildren, useState } from "react";
+import { twMerge } from "tailwind-merge";
 
-export function Sidebar() {
+export function Sidebar({ opened }: { opened: boolean }) {
+  const classes = twMerge("flex-col p-4 w-80 h-full text-gray-800 border-r border-gray-100 bg-white absolute sm:relative flex transition-all left-0", !opened && "-left-80 sm:-left-0")
+
   return (
-    <aside className="flex flex-col p-4 w-80 h-full text-gray-800 border-r border-gray-100">
+    <aside className={classes}>
       <Section title="Getting Started">
         <SidebarLink to="/docs/welcome">Welcome to 🍊</SidebarLink>
         <SidebarLink to="/docs/quick-start">Quick Start</SidebarLink>

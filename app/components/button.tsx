@@ -11,3 +11,7 @@ export const LinkButton = (props: ComponentProps<typeof Link>) => (
 export const MinimalLink = (props: ComponentProps<typeof Link>) => (
   <Link {...props} className="text-orange-500 px-4 py-3 whitespace-nowrap" />
 );
+
+export const MinimalButton = (props: ComponentProps<"button">) => (
+  <button {...props} className="text-orange-500 px-4 py-3 whitespace-nowrap" />
+);

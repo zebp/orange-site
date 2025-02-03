@@ -1,0 +1,27 @@
+```jsx
+export class Data extends RouteDurableObject<Env> {
+  @state
+  state = { likes: 0 };
+
+  async loader() {
+    return this.state;
+  }
+
+  async action() {
+    this.state.likes++;
+  }
+}
+
+export default function Home() {
+  const { likes } = useDurableObject<Data>();
+
+  return (
+    <Form method="patch" navigate={false}>
+      <span>{likes} likes</span>
+      <button type="submit">
+        Like
+      </button>
+    </Form>
+  );
+}
+```

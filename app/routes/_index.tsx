@@ -1,6 +1,5 @@
-import { Link } from "@orange-js/orange";
 import Sample from "~/components/sample.mdx";
-import { LinkButton, MinimalLink } from "~/components/button";
+import { LinkButton } from "~/components/button";
 import { Topnav } from "~/components/nav";
 
 export function Hero() {
@@ -20,7 +19,6 @@ export function Hero() {
         </div>
         <div className="space-x-4">
           <LinkButton to="/docs/welcome">Get Started</LinkButton>
-          <MinimalLink to="/docs/quick-start">Get Started (faster)</MinimalLink>
         </div>
       </div>
       <div className="m-w-[55ch] p-8 rounded-lg lg:shadow-lg hidden xl:block mt-12 lg:mt-0">

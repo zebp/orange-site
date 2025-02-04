@@ -1,15 +1,50 @@
 import { Link, useLocation } from "@orange-js/orange";
-import { PropsWithChildren, useState } from "react";
+import { PropsWithChildren, useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
-export function Sidebar({ opened }: { opened: boolean }) {
-  const classes = twMerge("flex-col p-4 w-80 h-full text-gray-800 border-r border-gray-100 bg-white absolute sm:relative flex transition-all left-0", !opened && "-left-80 sm:-left-0")
+function useSwipe(ref: React.RefObject<HTMLElement | null>, onSwipe: () => void) {
+  const [startX, setStartX] = useState(0);
+
+  useEffect(() => {
+    const el = ref.current;
+
+    if (!el) return;
+
+    function handleStart(e: TouchEvent) {
+      setStartX(e.touches[0].clientX);
+    }
+
+    function handleEnd(e: TouchEvent) {
+      const endX = e.changedTouches[0].clientX;
+      const diff = startX - endX;
+
+      if (diff > 50) {
+        onSwipe();
+      }
+    }
+
+    el.addEventListener("touchstart", handleStart);
+    el.addEventListener("touchend", handleEnd);
+
+    return () => {
+      el.removeEventListener("touchstart", handleStart);
+      el.removeEventListener("touchend", handleEnd);
+    };
+  }, [ref, onSwipe]);
+}
+
+export function Sidebar({ opened, setOpened }: { opened: boolean, setOpened: (o: boolean) => void }) {
+  const ref = useRef<HTMLElement>(null);
+  const onSwipe = () => setOpened(false);
+  const classes = twMerge("flex-col p-4 w-80 h-full text-gray-800 border-r border-gray-100 bg-white absolute lg:relative flex transition-all left-0", !opened && "-left-80 lg:-left-0")
+
+  useSwipe(ref, onSwipe);
 
   return (
-    <aside className={classes}>
+    <aside className={classes} ref={ref}>
       <Section title="Getting Started">
         <SidebarLink to="/docs/welcome">Welcome to 🍊</SidebarLink>
-        <SidebarLink to="/docs/quick-start">Quick Start</SidebarLink>
+        <SidebarLink to="/docs/getting-started">Getting Started</SidebarLink>
         <SidebarLink to="/docs/secret-sauce">Secret Sauce</SidebarLink>
         <SidebarLink to="/docs/todo">Spatial Compute</SidebarLink>
       </Section>

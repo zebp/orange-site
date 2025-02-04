@@ -1,3 +1,45 @@
-# orange-js
+# 🍊 OrangeJS
 
-Orange is a framework for building simple, fast, and distributed apps on Cloudflare without the headaches.
+Orange is a framework for building simple, fast, and distributed apps on Cloudflare without the headaches by incorporating Cloudflare-specific abstractions into React Router.
+
+## Why should I use Orange over React-Router?
+
+By being purpose-built for Cloudflare, Orange can optimize the developer experience by providing abstractions specific to Cloudflare's platform. Data fetching can be geographically optimized to dynamically run close to your database or users. Durable Objects are first-class citizens and can be used as route loaders/actions, with support for every binding offered to the Workers platform.
+
+## Quick Start
+
+First, create an Orange project with your package manager of choice, install the dependencies, and optionally initialize a git repository:
+
+```bash
+$ npm create orange@latest my-orange-project
+```
+
+Then open the project, start the development server, and visit `localhost:5173`:
+
+```bash
+$ cd my-orange-project
+$ npm run dev
+```
+
+And that's it! You've created your first Orange project containing TypeScript, React, TailwindCSS, and 🍊.
+
+### Routing
+
+Orange uses React Router's [flat routes](https://reactrouter.com/how-to/file-route-conventions#basic-routes) to define routes. You'll notice that the template comes with a `routes` folder that contains an `_index.tsx` file, which serves as your home route. You can add more routes by creating new files in the `routes` directory using `.` to nest paths.
+
+### Deploying
+
+To deploy your Orange project, you can use the `deploy` script to deploy your Project to Cloudflare's network.
+
+```bash
+$ npm run deploy
+```
+
+
+### Even quicker start
+
+For the docs speed-runners among us, you can be just as speedy by doing
+
+```bash
+$ npm create orange@latest my-app && cd my-app && npm run dev
+```

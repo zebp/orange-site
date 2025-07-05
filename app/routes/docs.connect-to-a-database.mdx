@@ -1,0 +1,18 @@
+
+import { MultiCodeBlock } from "../components/multi-code";
+
+import NodePostgres from "../components/connect-to-a-database/node-postgres.mdx";
+import PostgresJs from "../components/connect-to-a-database/postgres-js.mdx";
+
+# Connecting to a Database
+
+When building an application on Cloudflare Workers, you'll have to connect to your database via different mechanisms depending on the type of database you're using.
+
+## Establishing the connection
+
+The idiomatic way to connect to a database in Orange is to supply it in your [Context](/docs/context). Depending on the type of database and the type of connection you're using, you'll have to use different methods to connect to the database.
+
+<MultiCodeBlock options={{
+  "node-postgres": <NodePostgres />,
+  "postgres": <PostgresJs />,
+}}/>

@@ -15,27 +15,29 @@
   "description": "",
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@cloudflare/workers-types": "^4.20241230.0",
-    "@orange-js/vite": "^0.0.10",
+    "@cloudflare/workers-types": "^4.20250224.0",
+    "@orange-js/cli": "0.0.0-b76bac0",
+    "@orange-js/vite": "0.0.0-b76bac0",
     "@shikijs/rehype": "^2.2.0",
     "@types/react": "^19.0.2",
-    "autoprefixer": "^10.4.20",
     "esbuild": "^0.24.2",
-    "postcss": "^8.4.49",
+    "remark-gfm": "^4.0.1",
     "shiki": "^2.2.0",
-    "tailwindcss": "^3.4.17",
-    "vite": "^6.0.11",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.2",
     "vite-tsconfig-paths": "^5.1.4",
-    "wrangler": "^3.105.0"
+    "wrangler": "^4.0.0"
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.0",
     "@mdx-js/rollup": "^3.1.0",
-    "@orange-js/orange": "^0.0.7",
+    "@orange-js/orange": "0.0.0-b76bac0",
+    "@tailwindcss/vite": "^4.0.14",
     "diffable-objects": "^0.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router": "^7.1.1",
-    "tailwind-merge": "^3.0.1"
+    "react-icons": "^5.5.0",
+    "tailwind-merge": "^3.0.1",
+    "tailwindcss": "^4.0.14"
   }
 }

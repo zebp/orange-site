@@ -1,0 +1,10 @@
+```tsx
+import { Context } from "@orange-js/orange";
+import { Client } from "pg";
+
+export async function database(env: Env) {
+  return {
+    database: new Client(env.databaseConnectionString)
+  };
+}
+```

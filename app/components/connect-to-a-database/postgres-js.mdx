@@ -1,0 +1,17 @@
+```tsx
+import { Context } from "@orange-js/orange";
+import postgres from "postgres";
+
+/**
+ * Creates a database client using https://github.com/porsager/postgres-js
+ * 
+ * This will be accessible via `context.database` in your data-functions or
+ * as `database` property from the `context()` function.
+*/
+export async function database(env: Env) {
+  return {
+    // Uses hyperdrive to get a connection string to the Postgres connection pool.
+    database: postgres(env.hyperdriveDatabase.connectionString)
+  };
+}
+```

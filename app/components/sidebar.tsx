@@ -1,8 +1,11 @@
 import { Link, useLocation } from "@orange-js/orange";
-import { PropsWithChildren, useEffect, useRef, useState } from "react";
+import { type PropsWithChildren, useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
-function useSwipe(ref: React.RefObject<HTMLElement | null>, onSwipe: () => void) {
+function useSwipe(
+  ref: React.RefObject<HTMLElement | null>,
+  onSwipe: () => void
+) {
   const [startX, setStartX] = useState(0);
 
   useEffect(() => {
@@ -30,13 +33,22 @@ function useSwipe(ref: React.RefObject<HTMLElement | null>, onSwipe: () => void)
       el.removeEventListener("touchstart", handleStart);
       el.removeEventListener("touchend", handleEnd);
     };
-  }, [ref, onSwipe]);
+  }, [ref, onSwipe, startX]);
 }
 
-export function Sidebar({ opened, setOpened }: { opened: boolean, setOpened: (o: boolean) => void }) {
+export function Sidebar({
+  opened,
+  setOpened,
+}: {
+  opened: boolean;
+  setOpened: (o: boolean) => void;
+}) {
   const ref = useRef<HTMLElement>(null);
   const onSwipe = () => setOpened(false);
-  const classes = twMerge("flex-col p-4 w-80 h-full text-gray-800 border-r border-gray-100 bg-white absolute lg:relative flex transition-all left-0", !opened && "-left-80 lg:-left-0")
+  const classes = twMerge(
+    "flex-col p-4 w-96 min-h-full text-gray-800 border-r border-gray-100 bg-white static lg:relative flex transition-all left-0",
+    !opened && "-left-96 lg:-left-0"
+  );
 
   useSwipe(ref, onSwipe);
 
@@ -44,12 +56,15 @@ export function Sidebar({ opened, setOpened }: { opened: boolean, setOpened: (o:
     <aside className={classes} ref={ref}>
       <Section title="Getting Started">
         <SidebarLink to="/docs/welcome">Welcome to 🍊</SidebarLink>
-        <SidebarLink to="/docs/getting-started">Getting Started</SidebarLink>
-        <SidebarLink to="/docs/secret-sauce">Secret Sauce</SidebarLink>
-        <SidebarLink to="/docs/todo">Spatial Compute</SidebarLink>
+        <SidebarLink to="/docs/bindings">Bindings</SidebarLink>
+        <SidebarLink to="/docs/data-loading">Data Loading</SidebarLink>
+        <SidebarLink to="/docs/actions">Actions</SidebarLink>
+        <SidebarLink to="/docs/context">Context</SidebarLink>
+        {/* <SidebarLink to="/docs/secret-sauce">Secret Sauce</SidebarLink> */}
+        {/* <SidebarLink to="/docs/todo">Spatial Compute</SidebarLink> */}
       </Section>
 
-      <Section title="Data Layer">
+      {/* <Section title="Data Layer">
         <SidebarLink to="/docs/todo">
           SQL Databases <CloudflareChip>Hyperdrive</CloudflareChip>
         </SidebarLink>
@@ -60,7 +75,7 @@ export function Sidebar({ opened, setOpened }: { opened: boolean, setOpened: (o:
           SQLite <CloudflareChip>D1</CloudflareChip>
         </SidebarLink>
         <SidebarLink to="/docs/todo">
-          Durable Objects<CloudflareChip>Durable Object</CloudflareChip>
+          Durable Objects<CloudflareChip>DO</CloudflareChip>
         </SidebarLink>
         <SidebarLink to="/docs/todo">
           Key-Value Storage <CloudflareChip>KV</CloudflareChip>
@@ -68,11 +83,10 @@ export function Sidebar({ opened, setOpened }: { opened: boolean, setOpened: (o:
         <SidebarLink to="/docs/todo">
           Vector Database <CloudflareChip>Vectorize</CloudflareChip>
         </SidebarLink>
-      </Section>
+      </Section> */}
 
-      <Section title="How do I" folded>
+      <Section title="How do I">
         <SidebarLink to="/docs/todo">Connect to a Database</SidebarLink>
-        <SidebarLink to="/docs/todo">Create preview URLs</SidebarLink>
       </Section>
 
       <Section title="Features">
@@ -99,11 +113,13 @@ function Section({
 
   return (
     <section className="flex flex-col">
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
       <h2
         className="font-semibold text-xl hover:bg-gray-50 p-3 rounded-md hover:cursor-pointer select-none"
         onClick={() => setOpen((o) => !o)}
       >
-        {title}{!open && "..."}
+        {title}
+        {!open && "..."}
       </h2>
       {open && <div className="pl-2 flex flex-col gap-1 mb-3">{children}</div>}
     </section>
@@ -127,7 +143,7 @@ function SidebarLink({ to, children }: PropsWithChildren<{ to: string }>) {
 
 function CloudflareChip({ children }: PropsWithChildren) {
   return (
-    <div className="inline-block ml-auto text-xs p-1 rounded text-white bg-orange-500 bg-opacity-50">
+    <div className="font-mono inline-block ml-auto text-xs p-1 rounded text-white bg-orange-500 bg-opacity-50">
       {children}
     </div>
   );

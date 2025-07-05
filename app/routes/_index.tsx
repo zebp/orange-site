@@ -1,5 +1,5 @@
 import Sample from "~/components/sample.mdx";
-import { LinkButton } from "~/components/button";
+import { LinkButton, MinimalLink } from "~/components/button";
 import { Topnav } from "~/components/nav";
 
 export function Hero() {
@@ -9,7 +9,8 @@ export function Hero() {
         <div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
             Simple, Fast, Distributed,{" "}
-            <span className="text-[#f28021]">Cloudflare</span><br />
+            <span className="text-[#f28021]">Cloudflare</span>
+            <br />
             Apps.
           </h1>
           <p className="text-xl text-gray-800 mb-8">
@@ -19,6 +20,9 @@ export function Hero() {
         </div>
         <div className="space-x-4">
           <LinkButton to="/docs/welcome">Get Started</LinkButton>
+          <MinimalLink to="https://github.com/zebp/orange-js">
+            GitHub
+          </MinimalLink>
         </div>
       </div>
       <div className="m-w-[55ch] p-8 rounded-lg lg:shadow-lg hidden xl:block mt-12 lg:mt-0">

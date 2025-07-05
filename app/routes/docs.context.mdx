@@ -1,0 +1,81 @@
+# Context
+
+Within Orange dependencies of your application (DB connections, whatever) are passed through your application in an object called `Context`. `Context`, similar to React Router's `AppLoadContext` is a per-request object that is accessible anywhere in your app for **shared** dependencies.
+
+By default, Orange will provide a `cloudflare` property within Context with the [`Env`](https://developers.cloudflare.com/workers/runtime-apis/bindings/) object and a controller for the [`ExecutionContext`](https://developers.cloudflare.com/workers/runtime-apis/context/).
+
+## What kind of things should I put in the context?
+
+You should put things in the context that are used widely throughout your application. This includes things like database connections, API clients, Auth clients, etc. If it's something you would have made a global variable in a non-Orange application and has methods on it, it probably belongs in the context.
+
+## Populating the Context object.
+
+`Context` is intended to be customized in a type-safe way, `@orange-js/orange` has an exported type called `Context` that can be expanded via [declaration merging](https://www.typescriptlang.org/docs/handbook/declaration-merging.html) to include any dependencies you care to include. To facilitate this, Orange ships a `ContextFrom` type that can be used to automatically infer the types to be added to the context from a Context initializer function.
+
+```tsx
+declare module "@orange-js/orange" {
+  interface Context extends ContextFrom<typeof database> {}
+}
+
+// A context initializer function, this'll run for every request and turn an
+// `Env` into an object who's properties will be added to the `Context`
+export async function database(env: Env) {
+  return {
+    database: new PretendDatabaseClient(env.databaseConnectionString)
+  };
+}
+```
+
+After you have declared the context you can create the `Context` by defining a function that calls all your context initiators.
+
+```tsx
+import * as serverBundle from "virtual:orange-js/bundle";
+
+// Contentionally, initiators are defined in a separate file.
+import { database as databaseInitiator } from "./database.server.ts";
+import { auth as authInitiator } from "./auth.server.ts";
+
+export default app(serverBundle, {
+  // When a request is handled all initiators will be called in parallel and merged into
+  // the context object.
+  contexts: [databaseInitiator, authInitiator],
+});
+```
+
+## Accessing the Context within your routes
+
+Primarily the context is to be used within your server-side data functions (see [loaders](/docs/loaders) and [actions](/docs/actions)) and are just a property of the `LoaderFunctionArgs` / `ActionFunctionArgs` parameter.
+
+```tsx
+export async function loader({ context }: Route.LoaderFunctionArgs) {
+  // `context.database` is the same as `database` that was created in the context initializer
+  // that is re-used for the duration of the request. In this example, we're pretending to
+  // fetch entries from the users table of a database.
+  return await context.database.users.findMany();
+}
+
+export default function Component({ loaderData }: Route.ComponentProps) {
+  return (
+    <ul>
+      {loaderData.map((user) => <User key={user.id} user={user} />)}
+    </ul>
+  )
+}
+```
+
+## Accessing the Context elsewhere
+
+While context is primarily used within your data functions, it can be accessed anywhere in your application by calling the `context` function from `@orange-js/orange/server`.
+
+```tsx
+// A sample API route file that needs access to the context.
+import { context } from "@orange-js/orange/server";
+
+export default {
+  async fetch(request: Request) {
+    const { database } = await context();
+    const users = await database.users.findMany();
+    return Response.json(users);
+  }
+}
+```

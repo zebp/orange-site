@@ -1,0 +1,44 @@
+# Bindings
+
+Bindings are interfaces to use resources that are provided to you by the [Cloudflare Workers](https://developers.cloudflare.com/workers) platform that can be used in anywhere in your [Data Layer](/docs/data-layer) or [Route Actions](/docs/route-actions). A good mental model for bindings is to think of them as objects that you'd see on your `process.env` in Node.JS, except instead they're provided to you by accessing them as a property of `env` in your Orange project for any bindings configured in the `wrangler.jsonc` file.
+
+## What do bindings look like?
+
+Bindings look like standard JavaScript objects when you interact with them in your Orange project, but under the hood they're interfacing with your [Object Storage](), [KV Database](), or [SQLite Database]().
+
+Lets look at an example, below is a route that acts as a file-upload page where we an `R2` bindings to store any uploaded files in object storage, and redirect them to a route where we show them page with a download button.
+
+```jsx
+import { Form, redirect } from "@orange-js/orange";
+
+export async function action({ request, env }) {
+  const form = await request.formData();
+  const file = form.get("file") as File; // validation omitted for brevity.
+
+  // Store the file in the storage bucket.
+  await env.storageBucket.put(file.name, file.stream());
+
+  // Redirect to a page where they can view information about the file.
+  return redirect(`/uploads/${file.name}`);
+}
+
+export default function Upload() {
+  return (
+    <Form method="post" encType="multipart/form-data">
+      <input type="file" name="file" />
+      <button type="submit">Submit</button>
+    </Form>
+  );
+}
+```
+
+## What are some commonly used bindings?
+
+While Cloudflare offers a wide variety of bindings, here are some of the most commonly used bindings in Orange and what they're used for:
+
+| Binding      | Description                                                                |
+| ------------ | -------------------------------------------------------------------------- |
+| `KV`         | Distributed KV store, commonly used for caching or authentication.         |
+| `R2`         | Object storage similar to S3, commonly used for storing files.             |
+| `D1`         | Strongly consistent SQL database, typically used a primary database.       |
+| `Hyperdrive` | A connection pooler to Postgres databases hosted on other cloud providers. |
